@@ -1,2 +1,2 @@
-# CPQ-SF-Integration-Adapter
-CPQ Quote 1.0 SFDC Integration Adapter
+# SAP=CPQ-SF-Integration-Adapter
+SAP CPQ SFDC Integration Adapter
