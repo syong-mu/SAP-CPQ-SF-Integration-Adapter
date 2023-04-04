@@ -7,7 +7,7 @@ def custom_object_mappings(self):
     oppId = get_quote_opportunity_id(self.Quote)
     if oppId:
         mapping = dict()
-        condition = "OpportunityId='{opportunityId}' AND IsPrimary=true'".format(opportunityId=str(oppId))
+        condition = "OpportunityId='{opportunityId}' AND IsPrimary=true".format(opportunityId=str(oppId))
         soql = self.build_soql_query("ContactId", "OpportunityContactRole", condition)
         mapping["Name"] = "Opportunity_Primary_Role"
         mapping["Type"] = "Contact"
