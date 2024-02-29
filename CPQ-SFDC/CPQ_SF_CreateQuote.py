@@ -69,11 +69,12 @@ def main(Param, quote):
                         if sOQLResponse["totalSize"] > 0:
                             records = list()
                             for linkedQuote in sOQLResponse["records"]:
-                                record = dict()
-                                record[CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD] = False
-                                record["Id"] = str(linkedQuote["Id"])
-                                record["attributes"] = {"type": CL_SalesforceQuoteParams.SF_QUOTE_OBJECT}
-                                records.append(record)
+                                if int(linkedQuote[CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD]):
+                                    record = dict()
+                                    record[CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD] = False
+                                    record["Id"] = str(linkedQuote["Id"])
+                                    record["attributes"] = {"type": CL_SalesforceQuoteParams.SF_QUOTE_OBJECT}
+                                    records.append(record)
                             if records:
                                 compositeRequest = class_sf_integration_modules.get_cr_sobjectcollection_payload_header(API.PATCH, REF.UPDATE_PRIMARY_REFID, None)
                                 compositeRequest["body"] = {"records": records}

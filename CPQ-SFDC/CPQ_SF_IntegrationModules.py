@@ -295,11 +295,12 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
     # Function to GET Salesforce Quote records that are linked to an opportunity
     ###############################################################################################
     def build_cr_get_opp_quotes(self, opportunityId):
-        query = "?q=SELECT+Name,Id,{sfQuoteIdField},{sfOwnerIdField}+FROM+{sfQuoteObject}+WHERE+{sfQuoteOpportunityField}='{opportunityId}'"
+        query = "?q=SELECT+Name,Id,{sfQuoteIdField},{sfOwnerIdField},{sfPrimaryField}+FROM+{sfQuoteObject}+WHERE+{sfQuoteOpportunityField}='{opportunityId}'"
         sfQuoteIdField = CL_SalesforceQuoteParams.SF_QUOTE_ID_FIELD
         sfOwnerIdField = CL_SalesforceQuoteParams.SF_OWNER_ID_FIELD
+        sfPrimaryField = CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD
         sfQuoteOpportunityField = CL_SalesforceQuoteParams.SF_QUOTE_OPPORTUNITY_FIELD
-        query = query.format(sfQuoteIdField=str(sfQuoteIdField),sfOwnerIdField=str(sfOwnerIdField),sfQuoteObject=str(CL_SalesforceQuoteParams.SF_QUOTE_OBJECT),sfQuoteOpportunityField=str(sfQuoteOpportunityField),opportunityId=str(opportunityId))
+        query = query.format(sfQuoteIdField=str(sfQuoteIdField),sfOwnerIdField=str(sfOwnerIdField), sfPrimaryField=str(sfPrimaryField), sfQuoteObject=str(CL_SalesforceQuoteParams.SF_QUOTE_OBJECT),sfQuoteOpportunityField=str(sfQuoteOpportunityField),opportunityId=str(opportunityId))
         bearerToken = self.get_auth2_token()
         headers = self.get_authorization_header(bearerToken)
         response = self.call_soql_api(headers, query,INT_REF.REF_GET_QUOTES_LINKED_TO_OPPORTUNITY)

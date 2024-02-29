@@ -168,11 +168,12 @@ def main():
         # Make Quote Primary - Set other Quotes Primary Flag to False
         if otherQuotes is not None:
             for linkedQuote in otherQuotes:
-                record = dict()
-                record[CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD] = False
-                record["Id"] = str(linkedQuote["Id"])
-                record["attributes"] = {"type": CL_SalesforceQuoteParams.SF_QUOTE_OBJECT}
-                recordsToUpdate.append(record)
+                if str(linkedQuote[CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD]) == "true":
+                    record = dict()
+                    record[CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD] = False
+                    record["Id"] = str(linkedQuote["Id"])
+                    record["attributes"] = {"type": CL_SalesforceQuoteParams.SF_QUOTE_OBJECT}
+                    recordsToUpdate.append(record)
 
         # Update Opportunity
         record = class_sf_integration_modules.build_cr_record_update_opportunity(opportunityId)
