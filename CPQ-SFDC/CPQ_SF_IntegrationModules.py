@@ -183,6 +183,16 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
         headers = self.get_authorization_header(bearerToken)
         body = self.build_composite_body(compositePayload)
         response = self.call_rest_api(url, headers, body, API.POST, integrationReference, permissionList)
+
+        # check if the response was successful
+        if response:
+            # convert jobject or jarray to string
+            jsonString = RestClient.SerializeToJson(response)
+            # user session is invalid --> retry api call with admin session
+            if "INVALID_SESSION_ID" in jsonString:
+                headers = self.get_authorization_header(self.get_admin_auth2_token())
+                response = self.call_rest_api(url, headers, body, API.POST, integrationReference, permissionList)
+
         return response
 
     ###############################################################################################
@@ -192,6 +202,16 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
         # API path
         url = API.SOBJECT_COLLECTION_API
         response = self.call_rest_api(url, headers, body, API.POST, integrationReference, permissionList)
+
+        # check if the response was successful
+        if response:
+            # convert jobject or jarray to string
+            jsonString = RestClient.SerializeToJson(response)
+            # user session is invalid --> retry api call with admin session
+            if "INVALID_SESSION_ID" in jsonString:
+                headers = self.get_authorization_header(self.get_admin_auth2_token())
+                response = self.call_rest_api(url, headers, body, API.POST, integrationReference, permissionList)
+
         return response
 
     ###############################################################################################
@@ -201,6 +221,16 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
         # API path
         url = API.SOBJECT_COLLECTION_API
         response = self.call_rest_api(url, headers, body, API.PATCH, integrationReference, permissionList)
+
+        # check if the response was successful
+        if response:
+            # convert jobject or jarray to string
+            jsonString = RestClient.SerializeToJson(response)
+            # user session is invalid --> retry api call with admin session
+            if "INVALID_SESSION_ID" in jsonString:
+                headers = self.get_authorization_header(self.get_admin_auth2_token())
+                response = self.call_rest_api(url, headers, body, API.PATCH, integrationReference, permissionList)
+
         return response
 
     ###############################################################################################
@@ -218,6 +248,16 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
         # API path
         url = API.GET_SOQL_API.format(sfUrl=str(CL_SalesforceSettings.SALESFORCE_URL), version=str(CL_SalesforceSettings.SALESFORCE_VERSION), soql=str(soql))
         response = self.call_rest_api(url, headers, None, API.GET, integrationReference, permissionList)
+
+        # check if the response was successful
+        if response:
+            # convert jobject or jarray to string
+            jsonString = RestClient.SerializeToJson(response)
+            # user session is invalid --> retry api call with admin session
+            if "INVALID_SESSION_ID" in jsonString:
+                headers = self.get_authorization_header(self.get_admin_auth2_token())
+                response = self.call_rest_api(url, headers, None, API.GET, integrationReference, permissionList)
+
         return response
 
     ###############################################################################################
@@ -226,6 +266,16 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
     def call_sobject_delete_api(self, bearerToken, url, integrationReference, permissionList = None):
         headers = self.get_authorization_header(bearerToken)
         response = self.call_rest_api(url, headers, None, API.DELETE, integrationReference, permissionList)
+
+        # check if the response was successful
+        if response:
+            # convert jobject or jarray to string
+            jsonString = RestClient.SerializeToJson(response)
+            # user session is invalid --> retry api call with admin session
+            if "INVALID_SESSION_ID" in jsonString:
+                headers = self.get_authorization_header(self.get_admin_auth2_token())
+                response = self.call_rest_api(url, headers, None, API.DELETE, integrationReference, permissionList)
+
         return response
 
     ###############################################################################################
@@ -305,7 +355,6 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
         headers = self.get_authorization_header(bearerToken)
         response = self.call_soql_api(headers, query,INT_REF.REF_GET_QUOTES_LINKED_TO_OPPORTUNITY)
         return response
-
     ###############################################################################################
     # Function to get key Quote Mappings (CPQ -> Salesforce)
     ###############################################################################################
@@ -428,6 +477,16 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
         url = CL_SalesforceSettings.SALESFORCE_URL + API.GET_SOBJECT_API.format(sObject=str(sObject), sObjectId=str(sObjectId))
         headers = self.get_authorization_header(bearerToken)
         response = self.call_rest_api(url, headers, None, API.GET, INT_REF.REF_GET_SOBJECT_INFO)
+
+        # check if the response was successful
+        if response:
+            # convert jobject or jarray to string
+            jsonString = RestClient.SerializeToJson(response)
+            # user session is invalid --> retry api call with admin session
+            if "INVALID_SESSION_ID" in jsonString:
+                headers = self.get_authorization_header(self.get_admin_auth2_token())
+                response = self.call_rest_api(url, headers, None, API.GET, INT_REF.REF_GET_SOBJECT_INFO)
+
         return response
 
     ###############################################################################################
@@ -466,6 +525,16 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
 
         headers = self.get_authorization_header(bearerToken)
         response = self.call_rest_api(url, headers, body, API.POST, INT_REF.REF_POST_QUOTE_NOTES)
+
+        # check if the response was successful
+        if response:
+            # convert jobject or jarray to string
+            jsonString = RestClient.SerializeToJson(response)
+            # user session is invalid --> retry api call with admin session
+            if "INVALID_SESSION_ID" in jsonString:
+                headers = self.get_authorization_header(self.get_admin_auth2_token())
+                response = self.call_rest_api(url, headers, body, API.POST, INT_REF.REF_POST_QUOTE_NOTES)
+
         return response
 
     ###############################################################################################
@@ -510,6 +579,16 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
             url = API.GET_DESCRIBE_API
             headers = self.get_authorization_header(bearerToken)
             response = self.call_rest_api(url, headers, None, API.GET, INT_REF.REF_GET_DESCRIBE)
+
+            # check if the response was successful
+            if response:
+                # convert jobject or jarray to string
+                jsonString = RestClient.SerializeToJson(response)
+                # user session is invalid --> retry api call with admin session
+                if "INVALID_SESSION_ID" in jsonString:
+                    headers = self.get_authorization_header(self.get_admin_auth2_token())
+                    response = self.call_rest_api(url, headers, None, API.GET, INT_REF.REF_GET_DESCRIBE)
+
             if response:
                 self.Session["Describe"] = response
         else:
