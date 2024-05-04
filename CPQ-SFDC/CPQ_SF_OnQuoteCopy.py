@@ -10,7 +10,7 @@ opplineItem_mapping = CL_OpportunityLineItemMapping.mapping
 if CL_GeneralIntegrationSettings.UPDATE_OPP_LINE_ITEM\
 or CL_GeneralIntegrationSettings.UPDATE_CUSTOM_ITEM_OBJECT:
     # clear mapped SF custom object Ids from copied items
-    for item in CopiedItems:
+    for item in Quote.Items:
         # feature to update opportunity product is enabled
         if CL_GeneralIntegrationSettings.UPDATE_OPP_LINE_ITEM:
             item[opplineItem_mapping["CPQ_ITEM_FIELD_NAME"]].Value  = ""
