@@ -2,6 +2,16 @@ from CPQ_SF_IntegrationModules import CL_SalesforceIntegrationModules
 from CPQ_SF_IntegrationSettings import CL_GeneralIntegrationSettings
 import re
 
+###############################################################################################
+# Function to replace special characters in string
+###############################################################################################
+def replace_special_char(text):
+    special_chars = [{"symbol": "&", "code": "%26"}, {"symbol": "#", "code": "%23"}, {"symbol": "%", "code": "%25"}]
+    for special_char in special_chars:
+        text = text.replace(special_char["symbol"], special_char["code"])
+
+    return text
+
 def execute():
     #########################################
     # 1. INIT
@@ -16,6 +26,8 @@ def execute():
     query = "?q=" + re.sub('\++', '+', str(Param.QUERY))
     query = str.replace(query, "[", "(")
     query = str.replace(query, "]", ")")
+    #escaping special characters in query
+    query = replace_special_char(query)
     #Get id as 1st property in request (after "select")
     query_with_id = query[:9] + "+Id," + query[9:] if not re.search("(?i)(?<![\w\d])id(?![\w\d])", query.lower().split("where")[0]) else query
 
@@ -38,6 +50,10 @@ def execute():
         caching = Param.CACHING
     except:
         caching = CL_GeneralIntegrationSettings.TAG_CACHING # default value
+
+    try: groupBy = Param.GROUP_BY
+    except: groupBy = [] # default value
+
     #########################################
     # 2. SESSION CHECK
     #########################################
@@ -60,12 +76,23 @@ def execute():
     # 4. RESOLVE QUERY
     #########################################
     if not session_stored:
+        distinctList = []
+
         response = class_sf_integration_modules.call_soql_api(headers, query_with_id, None)
         response_dict = {}
         for record in response.records:
             response_dict[str(record.Id)] = {}
             for attr in record:
-               response_dict[str(record.Id)][attr.Name] = getattr(record,attr.Name)
+               # get attribute value from response
+               attrValue = getattr(record,attr.Name)
+               if str(attr.Name) in groupBy:
+                # add unique attribute value
+                if attrValue not in distinctList:
+                    response_dict[str(record.Id)][attr.Name] = attrValue
+                # flag that attribute value had been added to the list
+                distinctList.append(attrValue)
+               else: response_dict[str(record.Id)][attr.Name] = attrValue
+
 
         Session['Query'][query_with_id] = response_dict
         session_stored = response_dict

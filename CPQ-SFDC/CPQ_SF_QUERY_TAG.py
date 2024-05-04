@@ -3,6 +3,15 @@ from CPQ_SF_IntegrationReferences import CL_IntegrationReferences as INT_REF
 from CPQ_SF_IntegrationSettings import CL_GeneralIntegrationSettings
 import re
 
+###############################################################################################
+# Function to replace special characters in string
+###############################################################################################
+def replace_special_char(text):
+    special_chars = [{"symbol": "&", "code": "%26"}, {"symbol": "#", "code": "%23"}, {"symbol": "%", "code": "%25"}]
+    for special_char in special_chars:
+        text = text.replace(special_char["symbol"], special_char["code"])
+
+    return text
 
 def execute():
     #########################################
@@ -12,6 +21,8 @@ def execute():
     query = "?q=" + re.sub('\++', '+', str(Param.QUERY))
     query = str.replace(query, "[", "(")
     query = str.replace(query, "]", ")")
+    #escaping special characters in query
+    query = replace_special_char(query)
     class_sf_integration_modules = CL_SalesforceIntegrationModules(Quote, TagParserQuote, None, Session)
 
     try:
