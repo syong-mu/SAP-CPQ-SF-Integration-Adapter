@@ -289,19 +289,19 @@ class CL_CustomerModules(CL_SalesforceIntegrationModules):
                     customer = None
                     # Check if customer exists in CPQ
                     customer = CustomerHelper.GetCustomer(crmAccountId, crmContactId, inboundCustomerProc["CpqRole"])
-
+                    
                     # Create customer
                     if customer is None:
-
+                        
                         customer = self.Quote.NewCustomer(inboundCustomerProc["CpqRole"], crmAccountId, crmContactId)
                     # Set customer in Quote
                     set_customer_on_quote(self.Quote, inboundCustomerProc["CpqRole"], customer)
                     # Check if customer is present on Quote
                     customer = get_quote_customer(self.Quote, inboundCustomerProc["CpqRole"])
-
+                    
                     # Update customer
                     if event == EVENT_CREATE:
-
+                        
                         customer = getattr(CL_InboundCustomerMapping(), inboundCustomerProc["CreateCustomer"])(customer, compositeResponse["body"])
                     elif event == EVENT_UPDATE:
                         customer = getattr(CL_InboundCustomerMapping(), inboundCustomerProc["UpdateCustomer"])(customer, compositeResponse["body"])

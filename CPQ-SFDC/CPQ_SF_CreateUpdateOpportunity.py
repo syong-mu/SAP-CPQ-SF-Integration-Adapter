@@ -168,7 +168,7 @@ def main():
         # Make Quote Primary - Set other Quotes Primary Flag to False
         if otherQuotes is not None:
             for linkedQuote in otherQuotes:
-                if str(linkedQuote[CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD]) == "true":
+                if int(linkedQuote[CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD]):
                     record = dict()
                     record[CL_SalesforceQuoteParams.SF_PRIMARY_QUOTE_FIELD] = False
                     record["Id"] = str(linkedQuote["Id"])

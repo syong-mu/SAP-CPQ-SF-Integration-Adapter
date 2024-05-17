@@ -3,7 +3,7 @@
 #       Class to store general CPQ properties (TENANT SPECIFIC)
 ###############################################################################################
 class CL_CPQSettings:
-    # https://xxx.webcomcpq.com
+    # https://xxx.cpq.cloud.sap
     CPQ_URL = ""
 
 

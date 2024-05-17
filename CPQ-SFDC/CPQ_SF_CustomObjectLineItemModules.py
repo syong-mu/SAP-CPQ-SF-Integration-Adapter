@@ -30,7 +30,7 @@ class CL_CustomObjectLineItemModules(CL_SalesforceIntegrationModules, CL_CustomO
             recordIds = self.get_custom_object_item_record_ids(headers, lookUps, mapping["ObjectType"])
 
             # do not update line items from opportunity whenever flag is set to false
-            if not CL_GeneralIntegrationSettings.UPDATE_CUSTOM_OBJECT:
+            if not CL_GeneralIntegrationSettings.UPDATE_CUSTOM_ITEM_OBJECT:
                 # Delete all Salesforce records id
                 if recordIds:
                     if recordIds["totalSize"] > 0:
@@ -43,7 +43,7 @@ class CL_CustomObjectLineItemModules(CL_SalesforceIntegrationModules, CL_CustomO
                     for batch in range(0, len(quoteItems), API_LIMIT.CREATE_API_RECORD_LIMIT):
                         self.recreate_cust_obj_items(bearerToken, lookUps, mapping["ObjectType"], quoteItems[batch:batch+API_LIMIT.CREATE_API_RECORD_LIMIT], permissionList)
             else:
-               if quoteItems:
+                if quoteItems:
                     recordsToUpdate, recordsToDelete = self.build_records(recordIds, quoteItems, mapping)
 
                     if recordsToUpdate:
@@ -59,6 +59,13 @@ class CL_CustomObjectLineItemModules(CL_SalesforceIntegrationModules, CL_CustomO
                         self.delete_cust_obj_items(bearerToken, recordsToDelete, permissionList)
 
                     self.create_record(bearerToken, headers, lookUps, quoteItems, mapping)
+                # handle empty quote items
+                else:
+                    if recordIds:
+                        if recordIds["totalSize"] > 0:
+                            recordsToDelete = [str(record["Id"]) for record in recordIds["records"]]
+                            permissionList = [self.build_permission_checklist(mapping["ObjectType"], False, False, True)]
+                            self.delete_cust_obj_items(bearerToken, recordsToDelete, permissionList)
 
     ###############################################################################################
     # Function to delete custom object item records in Salesforce

@@ -22,7 +22,7 @@ class CL_GeneralIntegrationSettings:
     # Refresh cache for Salesforce object definitions when using tag scripts (CPQ_SF_***_TAG)
     TAG_CACHING = True
     # Update custom object line item and disable deletion of all object line items
-    UPDATE_CUSTOM_OBJECT = True
+    UPDATE_CUSTOM_ITEM_OBJECT = True
     # Update opportunity line item and disable deletion of all opportunity line items
     UPDATE_OPP_LINE_ITEM = True
 
@@ -58,7 +58,6 @@ class CL_SalesforceQuoteParams:
     SF_QUOTE_NUMBER_FIELD = "Name"
     # Salesforce relationship between Opportunity and Quote
     SF_OPP_QUOTE_REL = "Quotes__r"
-
 
 ###############################################################################################
 # Class CL_SalesforceAccountObjects:

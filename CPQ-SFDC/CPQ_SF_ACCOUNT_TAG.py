@@ -18,7 +18,7 @@ def execute():
 
     try:
         caching = Param.CACHING
-    except:
+    except: 
         caching = CL_GeneralIntegrationSettings.TAG_CACHING # default value
     # Get from Session if empty on Quote
     if not opportunityId:

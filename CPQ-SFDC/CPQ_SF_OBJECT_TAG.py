@@ -56,7 +56,7 @@ def execute():
 
     try:
         caching = Param.CACHING
-    except:
+    except: 
         caching = CL_GeneralIntegrationSettings.TAG_CACHING # default value
     #########################################
     # 2. SESSION CHECK
