@@ -8,9 +8,15 @@ VIEW = "view"
 externalParameters = context.ExternalParameters
 # Create Quote or Edit Quote
 action = externalParameters["action"]
+# Clear Session OnLandingFromCRM
+opportunityId = externalParameters["opportunityid"].strip()
+Session[opportunityId] = None
+Session["Query"] = None
+# Set SF User Session Token
 Session["apiSessionID"] = externalParameters["apiSessionID"]
 # Set Opportunity Id in Session
-Session["OpportunityId"] = externalParameters["opportunityid"]
+Session["OpportunityId"] = opportunityId
+
 if action == CREATE:
     redirectionUrl = ScriptExecutor.Execute("CPQ_SF_CreateQuote", {"externalParameters": externalParameters, "createQuote": True})
 elif action == EDIT:
