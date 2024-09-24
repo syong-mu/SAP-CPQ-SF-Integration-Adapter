@@ -12,8 +12,7 @@ from CPQ_SF_IntegrationMessages import CL_MessageHandler, CL_IntegrationMessages
 
 
 def main(Param, quote):
-    editQuoteURl = "/cart/edit?cartcompositenumber={quoteNumber}"
-    redirectionUrl = str()
+    redirectionUrl = CL_CPQSettings.CPQ_URL + "/quotation/Cart.aspx"
     externalParameters = Param.externalParameters
     # Get Opportunity Id
     opportunityId = externalParameters["opportunityid"].strip()
@@ -45,8 +44,6 @@ def main(Param, quote):
                 Quote = quote
                 quoteNumber = Quote.CompositeNumber
             if Quote:
-                # Set redirection URL
-                redirectionUrl = CL_CPQSettings.CPQ_URL + editQuoteURl.format(quoteNumber=quoteNumber)
                 class_sf_integration_modules = CL_SalesforceIntegrationModules(Quote, TagParserQuote, None, Session)
                 class_customer_modules = CL_CustomerModules(Quote, TagParserQuote, None, Session)
                 class_contact_modules = CL_ContactIntegrationModules(Quote, TagParserQuote, None, Session)

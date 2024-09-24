@@ -1,6 +1,6 @@
 from CPQ_SF_Configuration import CL_CPQSettings
 from CPQ_SF_IntegrationModules import CL_SalesforceIntegrationModules
-from CPQ_SF_IntegrationSettings import CL_GeneralIntegrationSettings, CL_SalesforceIntegrationParams
+from CPQ_SF_IntegrationSettings import CL_SalesforceIntegrationParams
 from CPQ_SF_FunctionModules import set_quote_opportunity_id
 from CPQ_SF_CpqHelper import EVENT_UPDATE
 from CPQ_SF_IntegrationReferences import CL_CompositeRequestReferences as REF, CL_IntegrationReferences as INT_REF
@@ -11,21 +11,14 @@ from CPQ_SF_CustomObjectModules import CL_CustomObjectModules
 
 if Param is not None:
     externalParameters = Param.externalParameters
-    redirectionUrl = CL_CPQSettings.CPQ_URL
+    redirectionUrl = CL_CPQSettings.CPQ_URL + "/quotation/Cart.aspx"
     # Get Opportunity Id
     opportunityId = externalParameters["opportunityid"].strip()
     quoteNumber = externalParameters["quotenumber"]
     quoteId = externalParameters["quoteId"]
     ownerId = externalParameters["ownerId"]
+    Quote = Param.quote
     if opportunityId and quoteId and ownerId:
-        # Open active revision
-        if CL_GeneralIntegrationSettings.ALL_REV_ATTACHED_TO_SAME_OPPORTUNITY:
-            editQuoteURl = "/cart/edit?cartcompositenumber={quoteNumber}".format(quoteNumber=str(quoteNumber))
-            Quote = QuoteHelper.Edit(quoteNumber)
-        # Open chosen revision
-        else:
-            editQuoteURl = "/cart/edit?ownerId={ownerId}&quoteId={quoteId}".format(ownerId=str(ownerId), quoteId=str(quoteId))
-            Quote = QuoteHelper.Edit(float(ownerId), float(quoteId))
         if Quote:
             # Attach Opportunity Id to Quote
             set_quote_opportunity_id(Quote, opportunityId)
@@ -79,6 +72,6 @@ if Param is not None:
             #############################################
             class_custom_object_modules.process_inbound_custom_object_mappings(bearerToken, EVENT_UPDATE)
         Quote.Save(False)
-        # Return redirect URL
-        redirectionUrl = CL_CPQSettings.CPQ_URL + editQuoteURl
+
+    # Return redirect URL
     Result = str(redirectionUrl)
