@@ -72,7 +72,7 @@ class CL_ContactIntegrationModules(CL_SalesforceIntegrationModules):
         contactMappings = [{"CpqRole": CPQ_BILL_TO, "Mapping": CL_OutboundContactMapping().BILL_TO_CONTACT, "CreateReference": REF.CREATE_BILL_TO_CONTACT, "UpdateReference": REF.UPDATE_BILL_TO_CONTACT},
                            {"CpqRole": CPQ_SHIP_TO, "Mapping": CL_OutboundContactMapping().SHIP_TO_CONTACT, "CreateReference": REF.CREATE_SHIP_TO_CONTACT, "UpdateReference": REF.UPDATE_SHIP_TO_CONTACT},
                            {"CpqRole": CPQ_END_USER, "Mapping": CL_OutboundContactMapping().END_CUSTOMER_CONTACT, "CreateReference": REF.CREATE_END_USER_CONTACT, "UpdateReference": REF.UPDATE_END_USER_CONTACT}]
-
+        
         for contactMapping in contactMappings:
             if contactMapping["Mapping"] and contactMapping["Mapping"] != "":
                 customer = get_quote_customer(self.Quote, contactMapping["CpqRole"])
@@ -336,12 +336,12 @@ class CL_ContactIntegrationModules(CL_SalesforceIntegrationModules):
             contactMappings = [{"CpqRole": CPQ_BILL_TO, "Mapping": CL_OutboundContactMapping().BILL_TO_CONTACT, "ContactIdReference": REF.BILL_TO_CONTACT_ID_REFID},
                                 {"CpqRole": CPQ_SHIP_TO, "Mapping": CL_OutboundContactMapping().SHIP_TO_CONTACT, "ContactIdReference": REF.SHIP_TO_CONTACT_ID_REFID},
                                 {"CpqRole": CPQ_END_USER, "Mapping": CL_OutboundContactMapping().END_CUSTOMER_CONTACT, "ContactIdReference": REF.END_USER_CONTACT_ID_REFID}]
-
+            
             for contactMapping in contactMappings:
                 if contactMapping["Mapping"] and contactMapping["Mapping"] != "":
                     # Get Contact Id
                     compositePayload = self.get_contact_composite_payload(compositePayload, contactMapping["Mapping"], opportunityId, opportunityResponse, contactMapping["ContactIdReference"])
-
+            
             if compositePayload:
                 contactsResponse = self.post_composite_request(bearerToken, compositePayload, INT_REF.REF_GET_CONTACTS)
                 if contactsResponse:

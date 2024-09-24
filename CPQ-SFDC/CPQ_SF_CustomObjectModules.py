@@ -66,7 +66,7 @@ class CL_CustomObjectModules(CL_SalesforceIntegrationModules):
         # Execute queries in batches of 5 as per Composite Request limitation in API_LIMIT.CR_SOQL_LIMIT
         for batch in range(0, len(custObjQueryMappings), API_LIMIT.CR_SOQL_LIMIT):
             response = self.get_query_custom_object_ids(bearerToken, custObjQueryMappings[batch:batch+API_LIMIT.CR_SOQL_LIMIT])
-            if response:
+            if response: 
                 responses.append(response)
         if responses:
             for response in responses:
@@ -146,7 +146,7 @@ class CL_CustomObjectModules(CL_SalesforceIntegrationModules):
         # Execute queries in batches of 5 as per Composite Request limitation in API_LIMIT.CR_SOQL_LIMIT
         for batch in range(0, len(mappings), API_LIMIT.CR_SOQL_LIMIT):
             response = self.get_query_custom_object_ids(bearerToken, mappings[batch:batch+API_LIMIT.CR_SOQL_LIMIT])
-            if response:
+            if response: 
                 responses.append(response)
         if responses:
             for response in responses:

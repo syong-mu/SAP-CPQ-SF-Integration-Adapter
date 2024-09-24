@@ -48,7 +48,7 @@ def execute():
 
     try:
         caching = Param.CACHING
-    except:
+    except: 
         caching = CL_GeneralIntegrationSettings.TAG_CACHING # default value
 
     try: groupBy = Param.GROUP_BY

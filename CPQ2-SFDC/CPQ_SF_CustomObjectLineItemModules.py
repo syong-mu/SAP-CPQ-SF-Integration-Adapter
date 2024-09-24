@@ -29,6 +29,7 @@ class CL_CustomObjectLineItemModules(CL_SalesforceIntegrationModules, CL_CustomO
             # Get existing record ids
             recordIds = self.get_custom_object_item_record_ids(headers, lookUps, mapping["ObjectType"])
 
+            # do not update line items from opportunity whenever flag is set to false
             if not CL_GeneralIntegrationSettings.UPDATE_CUSTOM_OBJECT:
                 # Delete all Salesforce records id
                 if recordIds:
@@ -59,6 +60,7 @@ class CL_CustomObjectLineItemModules(CL_SalesforceIntegrationModules, CL_CustomO
                         self.delete_cust_obj_items(bearerToken, recordsToDelete, permissionList)
 
                     self.create_record(bearerToken, headers, lookUps, recordIds, quoteItems, mapping)
+                
                 # handle empty quote items
                 else:
                     if recordIds:

@@ -42,13 +42,13 @@ class CL_CpqHelper:
             if condition == "":
                 soql = "?q=SELECT {selectedFields} FROM {table}".format(selectedFields=str(selectedFields), table=str(table))
             else:
-                # Replace special characters (&, #, +)
+                # Replace special characters (&, #, +) 
                 condition = self.replace_special_char(str(condition))
                 soql = "?q=SELECT {selectedFields} FROM {table} WHERE {condition}".format(selectedFields=str(selectedFields), table=str(table), condition=str(condition))
         if soql is not None:
             soql = soql.replace(" ", "+")
         return soql
-
+    
     ###############################################################################################
     # Function to replace special characters in string (Used in SOQL API calls)
     ###############################################################################################

@@ -59,6 +59,7 @@ class CL_CustomObjectLineItemModules(CL_SalesforceIntegrationModules, CL_CustomO
                         self.delete_cust_obj_items(bearerToken, recordsToDelete, permissionList)
 
                     self.create_record(bearerToken, headers, lookUps, recordIds, quoteItems, mapping)
+
                 # handle empty quote items
                 else:
                     if recordIds:
