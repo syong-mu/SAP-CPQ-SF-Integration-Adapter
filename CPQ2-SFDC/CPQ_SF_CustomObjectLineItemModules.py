@@ -59,7 +59,7 @@ class CL_CustomObjectLineItemModules(CL_SalesforceIntegrationModules, CL_CustomO
                         permissionList = [self.build_permission_checklist(mapping["ObjectType"], False, False, True)]
                         self.delete_cust_obj_items(bearerToken, recordsToDelete, permissionList)
 
-                    self.create_record(bearerToken, headers, lookUps, quoteItems, mapping)
+                    self.create_record(bearerToken, headers, lookUps, recordIds, quoteItems, mapping)
                 
                 # handle empty quote items
                 else:
@@ -68,8 +68,6 @@ class CL_CustomObjectLineItemModules(CL_SalesforceIntegrationModules, CL_CustomO
                             recordsToDelete = [str(record["Id"]) for record in recordIds["records"]]
                             permissionList = [self.build_permission_checklist(mapping["ObjectType"], False, False, True)]
                             self.delete_cust_obj_items(bearerToken, recordsToDelete, permissionList)
-
-            
 
     ###############################################################################################
     # Function to delete custom object item records in Salesforce
@@ -189,8 +187,15 @@ class CL_CustomObjectLineItemModules(CL_SalesforceIntegrationModules, CL_CustomO
     ###############################################################################################
     # Function to bulk create new records from quote line items
     ###############################################################################################
-    def create_record(self, bearerToken, headers, lookUps, quoteItems, mapping):
-        recordsToCreate = [item for item in quoteItems if not item["item"][mapping["CPQ_ITEM_FIELD_NAME"]]]
+    def create_record(self, bearerToken, headers, lookUps, recordIds, quoteItems, mapping):
+        recordsToCreate = []
+        # Create new quote item records without a Salesforce identifier whenever the custom object line item contains records.
+        if recordIds and recordIds["totalSize"] != 0:
+            recordsToCreate = [item for item in quoteItems if not item["item"][mapping["CPQ_ITEM_FIELD_NAME"]]]
+        # Create new quote item records for all quote items whenever the custom object line item does not contains records.
+        else:
+            recordsToCreate = [item for item in quoteItems]
+
         if recordsToCreate:
             permissionList = [self.build_permission_checklist(mapping["ObjectType"], True)]
             # Create records
