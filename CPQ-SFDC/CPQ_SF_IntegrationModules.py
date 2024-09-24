@@ -563,7 +563,7 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
     ###############################################################################################
     def set_market_on_quote(self, opportunityResponse):
         priceBookMappings = CL_PriceBookMapping().priceBookMapping
-        priceBookMapping = next((mapping set_market_on_quotefor mapping in priceBookMappings if mapping["SF_PRICEBOOK_ID"] == str(opportunityResponse["body"]["Pricebook2Id"])), None)
+        priceBookMapping = next((mapping for mapping in priceBookMappings if mapping["SF_PRICEBOOK_ID"] == str(opportunityResponse["body"]["Pricebook2Id"])), None)
         if priceBookMapping:
             # Get CPQ Market Code
             marketCode = get_market_code(priceBookMapping["CPQ_MARKET_ID"])
