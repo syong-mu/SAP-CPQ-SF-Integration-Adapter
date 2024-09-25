@@ -43,10 +43,10 @@ elif action == EDIT:
     else:
         quoteId = externalParameters["quoteId"]
         ownerId = externalParameters["ownerId"]
-        quote = QuoteHelper.Edit(float(ownerId), float(quoteId))
+        Quote = QuoteHelper.Edit(float(ownerId), float(quoteId))
 
-    if is_action_allowed(quote, User, externalParameters, EDIT_ACTION_ID) == True:
-        redirectionUrl = ScriptExecutor.Execute("CPQ_SF_EditQuote", {"externalParameters": externalParameters, "quote": quote})
+    if is_action_allowed(Quote, User, externalParameters, EDIT_ACTION_ID) == True:
+        redirectionUrl = ScriptExecutor.Execute("CPQ_SF_EditQuote", {"externalParameters": externalParameters, "quote": Quote})
     else:
         redirectionUrl = ScriptExecutor.Execute("CPQ_SF_ViewQuote", {"externalParameters": externalParameters})
 elif action == NEW:
