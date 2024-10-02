@@ -248,14 +248,8 @@ def get_actionid_count(tabId, Quote, actionId):
 ###############################################################################################
 # Function to check if user is allowed to trigger this action
 ###############################################################################################
-def is_action_allowed(QuoteHelper, User, externalParameters, actionId):
-    quoteId = externalParameters["quoteId"]
+def is_action_allowed(Quote, User, externalParameters, actionId):
     ownerId = externalParameters["ownerId"]
-    quoteNumber = externalParameters["quotenumber"]
-    if CL_GeneralIntegrationSettings.ALL_REV_ATTACHED_TO_SAME_OPPORTUNITY:
-        Quote = QuoteHelper.Edit(quoteNumber)
-    else:
-        Quote = QuoteHelper.Edit(float(ownerId), float(quoteId))
 
     # get tab Id, whether user is on My Quote, Other Quotes
     tabId = get_tabid(User, ownerId)
@@ -264,5 +258,7 @@ def is_action_allowed(QuoteHelper, User, externalParameters, actionId):
     # user type count = 0 when user type does not have permission on this action
     userTypeCount = get_usergroup_count(User, actionId)
 
-    if actionCount > 0 and userTypeCount > 0:  return True
-    else: return False
+    if actionCount > 0 and userTypeCount > 0:
+        return True
+    else:
+        return False
