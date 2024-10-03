@@ -17,14 +17,13 @@ if Param is not None:
     opportunityId = externalParameters["opportunityid"]
     quoteId = externalParameters["quoteId"]
     quoteNumber = externalParameters["quotenumber"]
+    Quote = Param.quote
     if opportunityId and quoteId:
         # Open active revision
         if CL_GeneralIntegrationSettings.ALL_REV_ATTACHED_TO_SAME_OPPORTUNITY:
-            Quote = QuoteHelper.Get(quoteNumber)
             redirectionUrl = redirectionUrl + "/cart/edit?cartcompositenumber={quoteNumber}".format(quoteNumber=str(quoteNumber))
         # Open chosen revision
         else:
-            Quote = QuoteHelper.Get(float(quoteId))
             redirectionUrl = redirectionUrl + "/cart/edit?ownerId={ownerId}&quoteId={quoteId}".format(ownerId=str(Quote.OwnerId), quoteId=str(Quote.Id))
         if Quote:
             # Attach Opportunity Id to Quote
