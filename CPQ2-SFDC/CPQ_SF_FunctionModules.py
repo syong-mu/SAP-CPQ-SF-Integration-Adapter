@@ -133,14 +133,8 @@ def get_usergroup_count(User, actionId):
 # Function block to get tab id
 # The Tab Id value e.g. 1 for My Quotes, 2 for Waiting For Approval and 3 for Other Quotes.
 ###############################################################################################
-def get_tabid(User, ownerId):
-    # My Quotes
-    if User.Id == ownerId: tabId = 1
-    # Other Quotes
-    else: tabId = 3
-
-    return tabId
-
+def get_tabid(user, owner_id):
+    return 1 if user.Id == owner_id else 3
 
 ###############################################################################################
 # Function to get number of actions which have been assigned to workflow
@@ -162,14 +156,8 @@ def get_actionid_count(tabId, Quote, actionId):
 ###############################################################################################
 # Function to check if user is allowed to trigger this action
 ###############################################################################################
-def is_action_allowed(QuoteHelper, User, externalParameters, actionId):
-    quoteId = externalParameters["quoteId"]
+def is_action_allowed(Quote, User, externalParameters, actionId):
     ownerId = externalParameters["ownerId"]
-    quoteNumber = externalParameters["quotenumber"]
-    if CL_GeneralIntegrationSettings.ALL_REV_ATTACHED_TO_SAME_OPPORTUNITY:
-        Quote = QuoteHelper.Get(quoteNumber)
-    else:
-        Quote = QuoteHelper.Get(float(quoteId))
 
     # get tab Id, whether user is on My Quote, Other Quotes
     tabId = get_tabid(User, ownerId)
@@ -178,5 +166,7 @@ def is_action_allowed(QuoteHelper, User, externalParameters, actionId):
     # user type count = 0 when user type does not have permission on this action
     userTypeCount = get_usergroup_count(User, actionId)
 
-    if actionCount > 0 and userTypeCount > 0:  return True
-    else: return False
+    if actionCount > 0 and userTypeCount > 0:
+        return True
+    else:
+        return False
