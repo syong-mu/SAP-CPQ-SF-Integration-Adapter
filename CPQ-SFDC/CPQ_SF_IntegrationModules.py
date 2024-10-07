@@ -58,6 +58,38 @@ class CL_SalesforceIntegrationModules(CL_CpqHelper):
                 Log.Info("CPQ-SFDC: Request Body ({integrationReference})".format(integrationReference=str(integrationReference)), unicode(body))
             if response:
                 Log.Info("CPQ-SFDC: Response ({integrationReference})".format(integrationReference=str(integrationReference)), unicode(response))
+
+        # Debugging: Log API calls in custom table --> CPQ_SFDC_API_LOGS
+        if CL_GeneralIntegrationSettings.LOG_API_CALLS_IN_CUSTOM_TABLE:
+            tableInfo = SqlHelper.GetTable("CPQ_SFDC_API_LOGS")
+
+            def split_string(input_string, chunk_size=4000):
+                # Split the input string into chunks of specified size
+                return [input_string[i:i + chunk_size] for i in range(0, len(input_string), chunk_size)]
+
+            def add_log(tableInfo, title, content):
+                chunks = split_string(unicode(content))
+
+                for chunk in chunks:
+                    newrow = {}
+                    newrow["DATE"] = DateTime.Now
+                    newrow["TITLE"] = title
+                    newrow["DESCRIPTION"] = chunk
+                    newrow["CARTID"] = self.Quote.QuoteId
+                    newrow["CARTCOMPOSITENUMBER"] = self.Quote.CompositeNumber
+                    newrow["OPPORTUNITYID"] = self.Quote.GetCustomField("CPQ_SF_OPPORTUNITY_ID").Content
+                    newrow["OPPORTUNITYNAME"] = self.Quote.GetCustomField("CPQ_SF_OPPORTUNITY_NAME").Content
+                    tableInfo.AddRow(newrow)
+                SqlHelper.Upsert(tableInfo)
+
+            add_log(tableInfo, "CPQ-SFDC: Request Url ({integrationReference})".format(integrationReference=str(integrationReference)), url)
+
+            if body:
+                add_log(tableInfo, "CPQ-SFDC: Request Body ({integrationReference})".format(integrationReference=str(integrationReference)), body)
+
+            if response:
+                add_log(tableInfo, "CPQ-SFDC: Response ({integrationReference})".format(integrationReference=str(integrationReference)), response)
+
         return response
 
     ###############################################################################################
