@@ -131,7 +131,8 @@ def main(Param, quote):
                 #############################################
                 class_custom_object_modules.process_inbound_custom_object_mappings(bearerToken, EVENT_CREATE)
 
-                Quote.Save()
+                if Param.createQuote:
+                    Quote.Save()
             return redirectionUrl
 
 
