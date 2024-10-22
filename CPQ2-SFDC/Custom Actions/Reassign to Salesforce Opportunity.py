@@ -1,5 +1,5 @@
 from CPQ_SF_IntegrationModules import CL_SalesforceIntegrationModules
-from CPQ_SF_FunctionModules import get_quote_opportunity_id
+from CPQ_SF_FunctionModules import get_quote_opportunity_id, set_quote_opportunity_id
 from CPQ_SF_IntegrationReferences import CL_IntegrationReferences as INT_REF
 from CPQ_SF_IntegrationSettings import CL_SalesforceQuoteParams
 
@@ -26,6 +26,9 @@ def main(Quote):
             # Call REST API
             response = class_sf_integration_modules.call_sobject_delete_api(bearerToken, url, INT_REF.REF_DETACH_QUOTE, permissionList)
             if response:
+                # set opportunity Id where quote should be reassigned to
+                if Session["OpportunityId"]:
+                    set_quote_opportunity_id(Quote, Session["OpportunityId"])
                 #############################################
                 # 2. REATTACH (OUTBOUND MAPPINGS)
                 #############################################
